@@ -1,9 +1,7 @@
 # Rotary Positional Embedding (RoPE) — PyTorch Implementation
-
-
-
-
-
+[![PyTorch](https://img.shields.io/badge/Built_with-PyTorch-EE4C2C?logo=pytorch)](https://pytorch.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![DeepSeek](https://img.shields.io/badge/Inspired_by-DeepSeekV3-black?logo=openai)](https://github.com/deepseek-ai)
 
 ## Author
 
@@ -80,122 +78,26 @@ Parameters
 
 **For each token position p and embedding dimension i, the RoPE mechanism defines:**
 
-𝜃𝑖=1/base**2𝑖/𝑑
-θi
-	​
-
-=
-base
-d
-2i
-	​
-
-1
-	​
-
-
+𝜃𝑖=1/base<sup>2𝑖/𝑑</sup>	
+​
 and applies a rotation:
 
-RoPE
-(
-𝑥
-𝑝
-)
-=
-[
-𝑥
-1
-cos
-⁡
-(
-𝜃
-𝑝
-)
-−
-𝑥
-2
-sin
-⁡
-(
-𝜃
-𝑝
-)
-
-
-𝑥
-1
-sin
-⁡
-(
-𝜃
-𝑝
-)
-+
-𝑥
-2
-cos
-⁡
-(
-𝜃
-𝑝
-)
-]
-RoPE(x
-p
-	​
-
-)=[
-x
-1
-	​
-
-cos(θ
-p
-	​
-
-)−x
-2
-	​
-
-sin(θ
-p
-	​
-
-)
-x
-1
-	​
-
-sin(θ
-p
-	​
-
-)+x
-2
-	​
-
-cos(θ
-p
-	​
-
-)
-	​
-
-]
+RoPE(𝑥𝑝)=[𝑥1cos⁡(𝜃𝑝)−𝑥2sin⁡(𝜃𝑝)
+		𝑥1sin⁡(𝜃𝑝)+𝑥2cos⁡(𝜃𝑝)]
 
 This effectively rotates each embedding pair by a position-dependent angle, encoding order directly in the vector geometry.
 
-📘 Example Usage
+### Example Usage
 import torch
 from rope import RotaryEmbedding
 
-# Example: embedding dimension = 512
+'''Example: embedding dimension = 512'''
 x = torch.randn(2, 128, 512)  # (batch, seq_len, dim)
 
 rope = RotaryEmbedding(dim=512)
 rotated = rope(x)
 
-print(rotated.shape)  # (2, 128, 512)
+print(rotated.shape)  ''' (2, 128, 512)'''
 
 
 In a Transformer:
@@ -203,7 +105,7 @@ In a Transformer:
 q = RotaryEmbedding(dim=512)(q)
 k = RotaryEmbedding(dim=512)(k)
 
-🔬 Research References
+## Research References
 
 Su et al. (2021) — RoFormer: Enhanced Transformer with Rotary Position Embedding
 
@@ -213,7 +115,7 @@ Touvron et al. (2023) — LLaMA: Open and Efficient Foundation Language Models
 
 DeepSeek-V3 (2025) — Latent Attention with Rotary Positional Encoding
 
-🧠 Possible Applications
+## Possible Applications
 
 Integrating positional encoding in custom Transformer models
 
@@ -223,7 +125,7 @@ Studying the geometric effects of rotational embeddings
 
 Educational demos on sequence modeling
 
-📚 Citation
+## Citation
 
 If you reference or use this implementation, please cite both the RoFormer paper and this educational version:
 
@@ -240,7 +142,7 @@ If you reference or use this implementation, please cite both the RoFormer paper
 
 🌐 GitHub: Keeratpreetsingh
 
-🪪 License
+## License
 
 This repository is released under the MIT License.
 Original concept © 2021 RoFormer / Google Research.
