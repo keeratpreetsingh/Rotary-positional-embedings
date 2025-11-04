@@ -1,21 +1,20 @@
 import torch
 import torch.nn as nn 
-class Rope(nn.Module):
-    def __init__(self,context_lenght,dim):
+class RotaryEmbedding(nn.Module):
+    def __init__(self, dim, base=10000):
         super().__init__()
-        self.no_of_pairs=dim//2
-        self.freq=1/10000**(torch.arange(0,self.no_of_pairs)/self.no_of_pairs)
-        self.pos=torch.arange(context_lenght)
-        self.angles=torch.einsum('i,j->ij',self.pos,self.freq)
-        self.cos=torch.cos(self.angles)
-        self.sin=torch.sin(self.angles)
-    def forward(self,x):
-        b,s,d=x.shape
-        x_=x.view(b,s,d//2,2)
-        sin=self.sin.unsqueeze(0).unsqueeze(-1)
-        cos=self.cos.unsqueeze(0).unsqueeze(-1)
-        x_rotate=torch.zeros_like(x_)
-        x_rotate[...,0]=x_[...,0]*cos - x_[...,1]*sin
-        x_rotate[...,1]=x_[...,0]*sin + x_[...,1]*cos
-        x_rotate=x.view(b,s,d)
-        return x_rotate
+        assert dim % 2 == 0
+        self.dim = dim
+        inv_freq = 1.0 / (base ** (torch.arange(0, dim, 2).float() / dim))
+        self.register_buffer("inv_freq", inv_freq)
+
+    def forward(self, x):
+        seq_len = x.size(1)
+        device = x.device
+        positions = torch.arange(seq_len, device=device).float()
+        freqs = torch.einsum("i,j->ij", positions, self.inv_freq)
+        emb = torch.cat([freqs.sin(), freqs.cos()], dim=-1)
+        emb = emb.unsqueeze(0).expand(x.size(0), -1, -1)
+        x1, x2 = x[..., :self.dim//2], x[..., self.dim//2:]
+        sin, cos = emb[..., :self.dim//2], emb[..., self.dim//2:]
+        return torch.cat([x1 * cos - x2 * sin, x1 * sin + x2 * cos], dim=-1)
