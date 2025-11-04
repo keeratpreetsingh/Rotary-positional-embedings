@@ -33,16 +33,16 @@ This repository provides a minimal PyTorch implementation of RoPE, designed to i
 
 ## Key Features
 
-Continuous Rotational Encoding:
+**Continuous Rotational Encoding:**
 Injects position information multiplicatively through sinusoidal rotation.
 
-Relative Position Awareness:
+**Relative Position Awareness:**
 Enables the model to capture relationships between tokens based on their distance, not just absolute indices.
 
-Plug-and-Play Module:
+**Plug-and-Play Module:**
 Can be dropped into any attention mechanism by applying RoPE to queries and keys.
 
-Minimal Dependencies:
+**Minimal Dependencies:**
 Written purely in PyTorch — concise and research-friendly.
 
 ## Code Overview
@@ -72,24 +72,16 @@ class RotaryEmbedding(nn.Module):
 
 Parameters
 
-dim: Embedding dimension (must be even)
+**dim:** Embedding dimension (must be even)
 
-base: Frequency scaling constant (default: 10,000)
+**base:** Frequency scaling constant (default: 10,000)
 
-🧮 Mathematical Intuition
+### Mathematical Intuition
 
-For each token position p and embedding dimension i, the RoPE mechanism defines:
+**For each token position p and embedding dimension i, the RoPE mechanism defines:**
 
-𝜃
-𝑖
-=
-1
-base
-2
-𝑖
-𝑑
-θ
-i
+𝜃𝑖=1/base**2𝑖/𝑑
+θi
 	​
 
 =
