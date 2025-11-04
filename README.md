@@ -78,32 +78,32 @@ Parameters
 
 **For each token position p and embedding dimension i, the RoPE mechanism defines:**
 
-𝜃𝑖=1/base<sup>2𝑖/𝑑</sup>	
+	𝜃𝑖=1/base<sup>2𝑖/𝑑</sup>	
 ​
 and applies a rotation:
 
-RoPE(𝑥𝑝)=[𝑥1cos⁡(𝜃𝑝)−𝑥2sin⁡(𝜃𝑝)
+	RoPE(𝑥𝑝)=[𝑥1cos⁡(𝜃𝑝)−𝑥2sin⁡(𝜃𝑝)
 		𝑥1sin⁡(𝜃𝑝)+𝑥2cos⁡(𝜃𝑝)]
 
 This effectively rotates each embedding pair by a position-dependent angle, encoding order directly in the vector geometry.
 
 ### Example Usage
-import torch
-from rope import RotaryEmbedding
-
-'''Example: embedding dimension = 512'''
-x = torch.randn(2, 128, 512)  # (batch, seq_len, dim)
-
-rope = RotaryEmbedding(dim=512)
-rotated = rope(x)
-
-print(rotated.shape)  ''' (2, 128, 512)'''
+	import torch
+	from rope import RotaryEmbedding
+	
+	3Example: embedding dimension = 512
+	x = torch.randn(2, 128, 512)  # (batch, seq_len, dim)
+	
+	rope = RotaryEmbedding(dim=512)
+	rotated = rope(x)
+	
+	print(rotated.shape)  # (2, 128, 512)
 
 
 In a Transformer:
 
-q = RotaryEmbedding(dim=512)(q)
-k = RotaryEmbedding(dim=512)(k)
+	q = RotaryEmbedding(dim=512)(q)
+	k = RotaryEmbedding(dim=512)(k)
 
 ## Research References
 
